@@ -1,0 +1,45 @@
+Access and terms
+================
+
+Rate limiting
+-------------
+
+Zefix PublicREST needs the Basic credentials described in :doc:`install`. The
+node paces it at one request every 0.5 seconds and retries a 429 or a 5xx three
+times, backing off up to 30 seconds. It waits 30 seconds for an answer and
+identifies itself with a ``User-Agent`` carrying this repository's URL.
+
+A run of failed retries throws, so an empty result always means the company is
+absent from the register, never that a request failed.
+
+LINDAS and redistribution
+-------------------------
+
+The register data behind Zefix is also published as linked data through LINDAS,
+under terms the Federal Office of Justice states on `the Zefix site
+<https://www.zefix.admin.ch/en/search/entity/welcome>`_. Read those before
+redistributing bulk extracts.
+
+Built on
+--------
+
+.. list-table::
+   :header-rows: 1
+   :widths: 32 68
+
+   * - Package
+     - Does
+   * - `zefix-parser <https://pypi.org/project/zefix-parser/>`_
+     - Zefix: LINDAS SPARQL, PublicREST, UID validation
+   * - `shab-parser <https://pypi.org/project/shab-parser/>`_
+     - SHAB: discovery, fetch, parse, eleven-type event classification
+   * - `swissco <https://github.com/prospex-ch/swissco-cli>`_
+     - The same two registers from a command line, plus simap, FINMA, GLEIF and
+       ARAMIS
+
+Watching the whole register
+---------------------------
+
+`Prospex <https://prospex.ch>`_ reads every filing in the register and joins it
+to hiring, funding and web signals, then says which of those changes is worth a
+call.
