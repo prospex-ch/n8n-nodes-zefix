@@ -265,7 +265,7 @@ segments:
         duration: 2000
 
   - id: lookup-result
-    narration: "One item back. The legal name and its translations, the seat, the legal form in four languages, the register status, the statutory purpose and the address."
+    narration: "One item back. The legal name, the seat, the legal form in four languages, the register status, the statutory purpose, the nominal capital and the address."
     intent: "switch the output to JSON and hold on it"
     timing: parallel
     actions:
