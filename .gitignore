@@ -147,6 +147,7 @@ docs/_build/
 
 # ndemo demo recording
 .ndemo/
+# Generated from verification.template.yaml with live Zefix credentials.
 demo/verification/verification.yaml
 demo/verification/audio/
 demo/verification/video-raw/

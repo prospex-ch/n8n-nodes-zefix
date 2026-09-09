@@ -1,0 +1,325 @@
+app:
+  url: http://localhost:5678/home/workflows
+  viewport:
+    width: 1920
+    height: 1080
+  scale: 1
+  zoom: 1.1
+  colorScheme: light
+  setup:
+    - run: ./demo/verification/scripts/reset.sh
+    - type: wait
+      duration: 3000
+    - type: type
+      target: { role: textbox, name: "Email" }
+      text: semion.sidorenko@letemps.ch
+      if:
+        visible: "input[type=password]"
+    - type: type
+      target: { role: textbox, name: "Password" }
+      text: DemoPassw0rd!
+      if:
+        visible: "input[type=password]"
+    - type: click
+      target: { role: button, name: "Sign in" }
+      if:
+        visible: "input[type=password]"
+      done:
+        url: "**/home/workflows"
+
+titleCard:
+  title: "n8n-nodes-zefix"
+  subtitle: "The Swiss commercial register (Zefix)"
+  duration: 3500
+
+tts:
+  provider: openai
+  voice: alloy
+  speed: 1.0
+
+recording:
+  outputDir: "."
+  fps: 30
+
+segments:
+  - id: intro
+    narration: "This is a local n8n instance, freshly set up. I'll install the Zefix node from npm, connect it to the Swiss commercial register, and run both of the operations it offers."
+    intent: "show the empty n8n workflows overview"
+    actions:
+      - type: wait
+        duration: 1500
+
+  - id: open-community-nodes
+    narration: "Community nodes are installed from Settings."
+    intent: "open Settings, then the Community nodes page"
+    timing: parallel
+    actions:
+      - type: click
+        target: { role: menuitem, name: "Settings" }
+        done:
+          text:
+            selector: "[role=dialog]"
+            has: "Community nodes"
+      - type: wait
+        duration: 900
+      - type: click
+        target: { role: menuitem, name: "Community nodes" }
+        done:
+          stable: 800
+      - type: wait
+        duration: 1200
+
+  - id: install-package
+    narration: "The package is n8n-nodes-zefix. I'm pinning version 0.1.0, the same version I'm submitting for verification."
+    intent: "install the npm package by name and version"
+    timing: parallel
+    actions:
+      - type: click
+        target: { role: button, name: "Install a community node" }
+        done:
+          stable: 800
+      - type: wait
+        duration: 800
+      - type: type
+        target: { placeholder: "e.g. n8n-nodes-chatwork" }
+        text: "n8n-nodes-zefix@0.1.0"
+        delay: 60
+      - type: wait
+        duration: 800
+      - type: click
+        target: { role: checkbox }
+        done:
+          stable: 500
+      - type: wait
+        duration: 800
+      - type: click
+        target: { selector: "[data-test-id=install-community-package-button]" }
+        done:
+          text:
+            selector: "body"
+            has: "1 node"
+          timeout: 180000
+      - type: wait
+        duration: 1500
+
+  - id: installed
+    narration: "Version 0.1.0, straight from npm."
+    intent: "show the installed package entry and version, then return to the overview"
+    actions:
+      - type: hover
+        target: { text: "n8n-nodes-zefix" }
+      - type: wait
+        duration: 2500
+      - type: click
+        target: { text: "Settings" }
+        done:
+          url: "**/home/workflows"
+      - type: wait
+        duration: 1000
+
+  - id: new-workflow
+    narration: "Now a workflow."
+    intent: "create a new blank workflow"
+    timing: parallel
+    actions:
+      - type: click
+        target: { role: button, name: "Add new item" }
+        done:
+          stable: 600
+      - type: wait
+        duration: 800
+      - type: click
+        target: { role: menuitem, name: "New workflow" }
+        done:
+          url: "**/workflow/**"
+      - type: wait
+        duration: 1500
+
+  - id: add-trigger
+    narration: "A manual trigger to start it by hand."
+    intent: "add the Manual Trigger node"
+    timing: parallel
+    actions:
+      - type: click
+        target: { role: button, name: "Open nodes panel" }
+        done:
+          visible: "input[placeholder='Search nodes...']"
+      - type: wait
+        duration: 900
+      - type: type
+        target: { placeholder: "Search nodes..." }
+        text: "manual"
+        delay: 90
+      - type: wait
+        duration: 900
+      - type: click
+        target: { text: "Manual Trigger" }
+        done:
+          hidden: "text=What triggers this workflow?"
+      - type: wait
+        duration: 1300
+
+  - id: add-node
+    narration: "Searching for Zefix brings up the installed package. I'll start with the company lookup."
+    intent: "open the node panel, search Zefix, show the node details, add the lookup action"
+    timing: parallel
+    actions:
+      - type: click
+        target: { role: button, name: "Open nodes panel" }
+        done:
+          visible: "input[placeholder='Search nodes...']"
+      - type: wait
+        duration: 800
+      - type: type
+        target: { placeholder: "Search nodes..." }
+        text: "Zefix"
+        delay: 110
+      - type: wait
+        duration: 1300
+      - type: click
+        target: { text: "Zefix" }
+        done:
+          stable: 800
+      - type: wait
+        duration: 3500
+      - type: click
+        target: { text: "Look up a company" }
+        done:
+          stable: 1000
+      - type: wait
+        duration: 1500
+
+  - id: create-credential
+    narration: "Every Zefix endpoint refuses an unauthenticated call, so the node needs a PublicREST account. Accounts are issued by the Federal Office of Justice."
+    intent: "open the credential form"
+    timing: parallel
+    actions:
+      - type: click
+        target: { role: button, name: "Set up credential" }
+        done:
+          stable: 1000
+      - type: wait
+        duration: 1500
+
+  - id: fill-credential
+    narration: "Username and password, then save."
+    intent: "fill the credential and save it"
+    timing: parallel
+    actions:
+      - type: type
+        target: { selector: "[data-test-id=parameter-input-username] input" }
+        text: "__ZEFIX_USER__"
+        delay: 55
+      - type: wait
+        duration: 600
+      - type: type
+        target: { selector: "[data-test-id=parameter-input-password] input" }
+        text: "__ZEFIX_PASS__"
+        delay: 45
+      - type: wait
+        duration: 800
+      - type: click
+        target: { role: button, name: "Save" }
+        done:
+          stable: 800
+          timeout: 30000
+      - type: wait
+        duration: 1500
+
+  - id: test-credential
+    narration: "Saving runs the credential test, which calls the Zefix legal-form endpoint. Reopening the credential shows the result: connection tested successfully."
+    intent: "reopen the credential to show the connection test result"
+    actions:
+      - type: click
+        target: { selector: "[data-test-id=credential-edit-button]" }
+        done:
+          visible: "[data-test-id=credential-edit-dialog]"
+      - type: wait
+        duration: 3500
+      - type: click
+        target: { role: button, name: "Close this dialog" }
+        done:
+          hidden: "[data-test-id=credential-edit-dialog]"
+      - type: wait
+        duration: 1000
+
+  - id: lookup-uid
+    narration: "The most common action is a lookup by Swiss UID. I'll use Nestlé's."
+    intent: "enter the UID and execute the step"
+    timing: parallel
+    actions:
+      - type: type
+        target: { placeholder: "CHE-123.456.789" }
+        text: "CHE-105.909.036"
+        delay: 90
+      - type: wait
+        duration: 1000
+      - type: click
+        target: { selector: "[data-test-id=node-execute-button]" }
+        done:
+          text:
+            selector: "[data-test-id=output-panel]"
+            has: "Nestl"
+          timeout: 60000
+      - type: wait
+        duration: 2000
+
+  - id: lookup-result
+    narration: "One item back. The legal name and its translations, the seat, the legal form in four languages, the register status, the statutory purpose and the address."
+    intent: "switch the output to JSON and hold on it"
+    timing: parallel
+    actions:
+      - type: click
+        target: { selector: "[data-test-id=output-panel] :text-is(\"JSON\")" }
+        done:
+          stable: 700
+      - type: wait
+        duration: 6000
+
+  - id: search-name
+    narration: "The same node also searches the register by name, and returns every match. The UID comes back in the official dotted form on both operations, which is the form the gazette prints."
+    intent: "switch the operation to Search, enter a name and execute"
+    timing: parallel
+    actions:
+      - type: click
+        target: { selector: "[data-test-id=parameter-input-operation]" }
+        done:
+          stable: 600
+      - type: wait
+        duration: 800
+      - type: click
+        target: { role: option, name: "Search Find companies by name" }
+        done:
+          stable: 800
+      - type: wait
+        duration: 900
+      - type: type
+        target: { placeholder: "Migro*" }
+        text: "Migros"
+        delay: 90
+      - type: wait
+        duration: 900
+      - type: click
+        target: { selector: "[data-test-id=node-execute-button]" }
+        done:
+          text:
+            selector: "[data-test-id=output-panel]"
+            has: "Migros"
+          timeout: 60000
+      - type: wait
+        duration: 6000
+
+  - id: outro
+    narration: "That's the node: a lookup by identifier and a search by name, both against the official Swiss commercial register. The gazette that publishes every change to these entries is a separate API, and a separate package: n8n-nodes-shab."
+    intent: "close the node and show the finished canvas"
+    actions:
+      - type: press
+        key: "Escape"
+      - type: wait
+        duration: 1200
+      - type: click
+        target: { role: button, name: "Zoom to Fit" }
+        done:
+          stable: 700
+      - type: wait
+        duration: 3000
