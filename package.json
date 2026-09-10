@@ -1,6 +1,6 @@
 {
 	"name": "n8n-nodes-zefix",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "Read the Swiss commercial register (Zefix) from n8n: look a company up by UID or EHRA ID, and search the register by name",
 	"license": "MIT",
 	"homepage": "https://prospex.ch",

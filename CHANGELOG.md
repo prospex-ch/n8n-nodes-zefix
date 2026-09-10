@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+#### 0.1.1
+
+- Docs: dropped the opening cross-reference to
+  [`n8n-nodes-shab`](https://github.com/prospex-ch/n8n-nodes-shab) from the
+  README and the docs index. The gazette package is still linked from the
+  sections that need it.
+
 #### 0.1.0
 
 First release. Split out of

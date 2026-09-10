@@ -1,6 +1,13 @@
 Changelog
 =========
 
+0.1.1
+-----
+
+- Docs: dropped the opening cross-reference to ``n8n-nodes-shab`` from the
+  README and the docs index. The gazette package is still linked from the
+  sections that need it.
+
 0.1.0
 -----
 
