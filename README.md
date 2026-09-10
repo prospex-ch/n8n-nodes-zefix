@@ -6,11 +6,6 @@ Read the Swiss commercial register from n8n.
 register: it holds the current entry for every company in Switzerland. This node
 looks a company up by UID or EHRA ID, and searches the register by name.
 
-For the publications side of the register — every change to an entry, as the
-official gazette prints it, with a polling trigger — install
-[`n8n-nodes-shab`](https://github.com/prospex-ch/n8n-nodes-shab). The two are
-separate packages because they are separate APIs, and they join on `uid`.
-
 Built and maintained by [Prospex](https://prospex.ch), a Swiss B2B sales
 intelligence platform.
 
